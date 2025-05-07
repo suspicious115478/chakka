@@ -14,11 +14,6 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
-// ✅ Add root GET route
-app.get('/', (req, res) => {
-  res.send('FCM Server is running');
-});
-
 // POST endpoint to send FCM notification
 app.post('/sendRingingNotification', async (req, res) => {
   try {
@@ -48,7 +43,10 @@ app.post('/sendRingingNotification', async (req, res) => {
     return res.status(500).send('Internal Server Error');
   }
 });
-
+// ✅ Add root GET route
+app.get('/sendRingingNotification', (req, res) => {
+  res.send('FCM Server is running');
+});
 // Start server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
