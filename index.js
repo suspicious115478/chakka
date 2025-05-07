@@ -27,12 +27,15 @@ app.post('/sendRingingNotification', async (req, res) => {
       token: fcmToken,
       notification: {
         title: 'Incoming Call',
-        body: `Call from device: ${callerId}`,
+        body: `Someone Calling',
       },
       data: {
-        type: 'incoming_call',
-        callerId,
+        type: 'Incoming_call',
+        callerId: callerId
       },
+          android: {
+      priority: "high"
+    }
     };
 
     const response = await admin.messaging().send(message);
