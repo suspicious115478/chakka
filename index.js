@@ -27,10 +27,10 @@ app.post('/sendRingingNotification', async (req, res) => {
       token: fcmToken,
       notification: {
         title: 'Incoming Call',
-        body: 'You have a call',
+        body: 'You have an incoming call',
       },
       data: {
-        type: 'Incoming_call',
+        type: "ring",
         callerId: callerId
       },
           android: {
