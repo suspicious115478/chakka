@@ -1,21 +1,25 @@
 const express = require('express');
 const admin = require('firebase-admin');
 const bodyParser = require('body-parser');
-const { GoogleAuth } = require('google-auth-library');
 
 // Initialize Express
 const app = express();
 app.use(bodyParser.json());
 
-// Path to your Firebase service account JSON file (now fetched from environment variable)
+// Load Firebase service account from environment
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
 
-// Initialize Firebase Admin SDK with service account
+// Initialize Firebase Admin
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
-// Define the FCM API endpoint
+// ✅ Add root GET route
+app.get('/', (req, res) => {
+  res.send('FCM Server is running');
+});
+
+// POST endpoint to send FCM notification
 app.post('/sendRingingNotification', async (req, res) => {
   try {
     const { fcmToken, callerId } = req.body;
@@ -24,7 +28,6 @@ app.post('/sendRingingNotification', async (req, res) => {
       return res.status(400).send('Missing fcmToken or callerId');
     }
 
-    // Create the notification payload
     const message = {
       token: fcmToken,
       notification: {
@@ -37,7 +40,6 @@ app.post('/sendRingingNotification', async (req, res) => {
       },
     };
 
-    // Send FCM message
     const response = await admin.messaging().send(message);
     console.log('FCM Message sent successfully:', response);
     return res.status(200).send('Notification sent');
@@ -47,7 +49,7 @@ app.post('/sendRingingNotification', async (req, res) => {
   }
 });
 
-// Start the server
+// Start server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
