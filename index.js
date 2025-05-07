@@ -44,7 +44,7 @@ app.post('/sendRingingNotification', async (req, res) => {
   }
 });
 // ✅ Add root GET route
-app.get('/sendRingingNotification', (req, res) => {
+app.get('/', (req, res) => {
   res.send('FCM Server is running');
 });
 // Start server
